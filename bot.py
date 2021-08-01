@@ -49,13 +49,13 @@ async def on_member_update(before, after):
     beforeMatchmatch = re.search(pYoshiPattern, before.nick)
     afterMatchmatch = re.search(pYoshiPattern, after.nick)
 
-    if bool(beforeMatchmatch) == False and bool(afterMatchmatch) == True:
+    if !bool(beforeMatchmatch) and bool(afterMatchmatch):
         await after.add_roles(get(after.guild.roles, name="pYoshis"))
         now = datetime.now()
         current_time = now.strftime("%H:%M:%S")
         print(f'{after.name} is now a pYoshi, as of ', current_time)
     # Becoming a human
-    elif bool(beforeMatchmatch) == True and bool(afterMatchmatch) == False:
+    elif bool(beforeMatchmatch) and !bool(afterMatchmatch):
         await after.remove_roles(get(after.guild.roles, name="pYoshis"))
         now = datetime.now()
         current_time = now.strftime("%H:%M:%S")
