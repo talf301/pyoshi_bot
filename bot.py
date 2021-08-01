@@ -27,9 +27,10 @@ async def on_ready():
     pyoshi = get(guild.roles, name="pYoshis")
 
     for member in guild.members:
+        dname = member.nick if member.nick else member.name
         # check if they're named pYoshi and aren't a pYoshi
-        match = re.search(pYoshiPattern, member.nick)
-        if bool(match):
+        match = re.search(pYoshiPattern, dname)
+        if match:
             if pyoshi not in member.roles:
                 await member.add_roles(pyoshi)
                 now = datetime.now()
@@ -46,16 +47,18 @@ async def on_ready():
 @client.event
 async def on_member_update(before, after):
     # Becoming a pyoshi
-    beforeMatchmatch = re.search(pYoshiPattern, before.nick)
-    afterMatchmatch = re.search(pYoshiPattern, after.nick)
+    bname = before.nick if before.nick else before.name
+    aname = after.nick if after.nick else after.name
+    beforeMatchmatch = re.search(pYoshiPattern, bname)
+    afterMatchmatch = re.search(pYoshiPattern, aname)
 
-    if !bool(beforeMatchmatch) and bool(afterMatchmatch):
+    if not beforeMatchmatch and afterMatchmatch:
         await after.add_roles(get(after.guild.roles, name="pYoshis"))
         now = datetime.now()
         current_time = now.strftime("%H:%M:%S")
         print(f'{after.name} is now a pYoshi, as of ', current_time)
     # Becoming a human
-    elif bool(beforeMatchmatch) and !bool(afterMatchmatch):
+    elif beforeMatchmatch and not afterMatchmatch:
         await after.remove_roles(get(after.guild.roles, name="pYoshis"))
         now = datetime.now()
         current_time = now.strftime("%H:%M:%S")
